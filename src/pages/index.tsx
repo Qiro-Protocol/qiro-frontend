@@ -9,6 +9,7 @@ export default function Home() {
   const [deposit, setDeposit] = useState("")
   const [withdraw, setWithdraw] = useState("")
   const [balance, setBalance] = useState(0)
+  const [poolBalance, setPoolBalance] = useState(0)
   
   const { data: client } = useWalletClient()
   const { address } = useAccount()
@@ -20,6 +21,16 @@ export default function Home() {
     args: [address],
     onSuccess: (data) => {
       setBalance(Number(data))
+    }
+  })
+
+  const _ = useContractRead({
+    address: TEST_ERC20,
+    abi: ERC20_ABI,
+    functionName: "balanceOf",
+    args: [QIRO_ADDRESS],
+    onSuccess: (data) => {
+      setPoolBalance(Number(data))
     }
   })
 
@@ -122,6 +133,7 @@ export default function Home() {
       <Navbar />
       <div className="w-full h-full flex justify-center items-center flex-col mt-10 space-y-6">
         <h1>Your token balance - {formatUnits(BigInt(balance), 18)}</h1>
+        <h1>Pool token balance - {formatUnits(BigInt(poolBalance), 18)}</h1>
         <div className="w-1/3 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
           <h1 className="font-bold text-3xl">Deposit</h1>
           <input
