@@ -8,7 +8,7 @@ import { parseUnits } from 'viem'
 
 export default function Borrow() {
   const [borrow, setBorrow] = useState("")
-  const [times, setTimes] = useState(new Array(100).fill(0))
+  const [times, setTimes] = useState(new Array(100))
   const [loans, setLoans] = useState<any[]>([])
 
   useEffect(() => console.log(times), [times])
