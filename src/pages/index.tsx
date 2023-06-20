@@ -1,9 +1,9 @@
 import { Navbar } from "../components/navbar";
-import { useAccount, useContractRead, useWalletClient } from "wagmi";
+import { useAccount, useContractRead, usePublicClient, useWalletClient } from "wagmi";
 import { toast } from "react-hot-toast";
 import { ERC20_ABI, QIRO_ADDRESS, QIRO_POOL_ABI, TEST_ERC20 } from "@/lib/config";
 import { useEffect, useState } from "react";
-import { formatUnits } from "viem"
+import { formatUnits, parseUnits } from "viem"
 
 export default function Home() {
   const [deposit, setDeposit] = useState("")
@@ -23,6 +23,8 @@ export default function Home() {
     }
   })
 
+  const publicClient = usePublicClient()
+
   useEffect(() => console.log(isError, balance, isLoading), [isError, balance, isLoading])
   
   const approveToken = async () => {
@@ -36,7 +38,12 @@ export default function Home() {
         address: TEST_ERC20,
         abi: ERC20_ABI,
         functionName: "approve",
-        args: [QIRO_ADDRESS, deposit]
+        gas: 10000000n,
+        args: [QIRO_ADDRESS, parseUnits(deposit as `${number}`, 18)]
+      })
+
+      await publicClient.waitForTransactionReceipt({
+        hash
       })
   
       toast.success("Successfully deposited tokens in pool", {
@@ -62,7 +69,12 @@ export default function Home() {
         address: QIRO_ADDRESS,
         abi: QIRO_POOL_ABI,
         functionName: "deposit",
-        args: [deposit, client.account.address]
+        gas: 10000000n,
+        args: [parseUnits(deposit as `${number}`, 18), client.account.address]
+      })
+
+      await publicClient.waitForTransactionReceipt({
+        hash
       })
   
       toast.success("Successfully deposited tokens in pool", {
@@ -83,12 +95,16 @@ export default function Home() {
         id: toastId
       })
     
-      console.log(withdraw)
       const hash = await client.writeContract({
         address: QIRO_ADDRESS,
         abi: QIRO_POOL_ABI,
         functionName: "withdraw",
-        args: [withdraw, client.account.address, client.account.address]
+        gas: 10000000n,
+        args: [parseUnits(withdraw as `${number}`, 18), client.account.address, client.account.address]
+      })
+
+      await publicClient.waitForTransactionReceipt({
+        hash
       })
   
       toast.success("Successfully withdrawn tokens in pool", {

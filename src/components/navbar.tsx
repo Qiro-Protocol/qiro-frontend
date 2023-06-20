@@ -11,7 +11,8 @@ export const Navbar = () => {
     address: TEST_ERC20,
     abi: ERC20_ABI,
     functionName: "mint",
-    args: [address, 100000000000000000000n]
+    gas: 10000000n,
+    args: [address, 100000000000000000000n],
   })
 
   const { write, isLoading, isSuccess, isError } = useContractWrite(config)
