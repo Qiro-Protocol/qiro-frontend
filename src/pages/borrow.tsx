@@ -51,6 +51,10 @@ export default function Borrow() {
         gas: 10000000n,
         args: [QIRO_ADDRESS, balance]
       })
+
+      await publicClient.waitForTransactionReceipt({
+        hash
+      })
   
       toast.success("Successfully approved tokens to pool", {
         id: toastId
@@ -76,6 +80,10 @@ export default function Borrow() {
         gas: 10000000n,
         args: [parseUnits(borrow as `${number}`, 18), 12, "ipfs://"]
       })
+
+      await publicClient.waitForTransactionReceipt({
+        hash
+      })
   
       toast.success("Successfully borrowed tokens from pool", {
         id: toastId
@@ -87,7 +95,7 @@ export default function Borrow() {
     }
   }
 
-  const repayLoans = async (id: number, time: number) => {
+  const repayLoans = async (id: any, time: number) => {
     await approveToken()
 
     const toastId = toast.loading("Repaying tokens to pool")
@@ -102,6 +110,10 @@ export default function Borrow() {
         functionName: "repay",
         gas: 10000000n,
         args: [id, time]
+      })
+
+      await publicClient.waitForTransactionReceipt({
+        hash
       })
   
       toast.success("Successfully repayed tokens to pool", {
@@ -137,13 +149,13 @@ export default function Borrow() {
                 <p className='text-sm text-gray-800'>Borrow Amount</p>
                 <h1 className='text-2xl font-bold'>${formatUnits(loan.borrowAmount.toString(), 18)}</h1>
                 <p className='text-sm text-gray-800'>Repaid Amount</p>
-                <h1 className='text-2xl font-bold'>${formatUnits(loan.repaidAmount.toString(), 18)}</h1>
+                <h1 className='text-2xl font-bold'>${Number(formatUnits(loan.repaidAmount.toString(), 18)).toFixed(2)}</h1>
                 <p className='text-sm text-gray-800'>Tenure</p>
                 <h1 className='text-2xl font-bold'>{loan.timePeriod.toString()} Months</h1>
               </div>
               <div className='space-y-2'>
                 <input value={times[idx]} onChange={(e) => setTimes(times => { const [...t] = times; t[idx] = Number(e.target.value); return t })} type="number" className='text-black w-full p-2 border rounded-xl' placeholder='Enter repay month' />
-                <div onClick={() => repayLoans(loan, times[idx])} className="text-black w-full p-2 bg-[#F1E9D2] rounded-xl cursor-pointer text-center">Repay</div>
+                <div onClick={() => repayLoans(loan.borrowId, times[idx])} className="text-black w-full p-2 bg-[#F1E9D2] rounded-xl cursor-pointer text-center">Repay</div>
               </div>
             </div>
           ))}

@@ -162,7 +162,7 @@ const Deposit = () => {
           <div className="w-8/12 text-black p-4">
             <h1>Total Assets</h1>
             <p className="text-2xl font-bold">
-              ${formatUnits(BigInt(poolBalance), 18)}
+              ${Number(formatUnits(BigInt(poolBalance), 18)).toFixed(2)}
             </p>
           </div>
           <div className="w-8/12 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
