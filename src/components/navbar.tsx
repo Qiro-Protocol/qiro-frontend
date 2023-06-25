@@ -47,11 +47,11 @@ export const Navbar = () => {
   }, [isSuccess, isError])
 
   return (
-    <div className="w-full flex justify-between items-center">
-      <div className="w-full pl-20 h-20 flex justify-start items-center">
+    <div className="w-full flex-col md:flex-row flex justify-center md:justify-between text-black items-center">
+      <div className="w-full pl-0 md:pl-20 h-20 flex justify-center md:justify-start items-center">
         <h1 className="text-2xl font-bold">Qiro</h1>
       </div>
-      <div className="w-full pr-20 h-20 flex justify-end items-center space-x-4">
+      <div className="w-full h-full mb-5 md:m-0 p-0 md:pr-20 h-20 flex-col md:flex-row flex justify-center md:justify-end items-center space-y-3 md:space-y-0 space-x-0 md:space-x-4">
         <Link href="/borrow">Borrow / Repay</Link>
         <Link href="/">Deposit / Withdraw</Link>
         <div onClick={() => mint()} className="cursor-pointer">Mint</div>

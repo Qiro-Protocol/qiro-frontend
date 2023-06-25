@@ -152,21 +152,21 @@ const Deposit = () => {
   return (
     <main className="w-full min-h-screen bg-white">
       <Navbar />
-      <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col md:flex-row flex items-center justify-center bg-white">
-        <div className="w-full h-full flex justify-center md:justify-end items-center">
-          <div className="w-8/12 flex justify-end  items-center">
+      <main className="w-full min-h-screen flex justify-center items-center bg-white">
+        <div className="w-full h-full flex justify-center items-center">
+          <div className="w-1/2 flex justify-center items-center">
             <Pool />
           </div>
         </div>
-        <div className="w-full h-full flex justify-center items-center md:items-start flex-col space-y-6">
-          <div className="w-8/12 text-black p-4">
+        <div className="w-full h-full flex justify-center items-center flex-col space-y-6">
+          <div className="w-1/2 p-4">
             <h1>Total Assets</h1>
             <p className="text-2xl font-bold">
               ${formatUnits(BigInt(poolBalance), 18)}
             </p>
           </div>
-          <div className="w-8/12 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
-            <h1 className="font-bold text-3xl text-black">Deposit</h1>
+          <div className="w-1/2 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
+            <h1 className="font-bold text-3xl">Deposit</h1>
             <input
               value={deposit}
               onChange={(val) => setDeposit(val.target.value)}
@@ -176,13 +176,13 @@ const Deposit = () => {
             />
             <div
               onClick={() => depositTokens()}
-              className="w-full p-3 bg-[#F1E9D2] text-black rounded-xl cursor-pointer text-center"
+              className="w-full p-3 bg-gray-500 rounded-xl cursor-pointer text-center"
             >
               Deposit
             </div>
           </div>
-          <div className="w-8/12 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
-            <h1 className="font-bold text-3xl text-black">Withdraw</h1>
+          <div className="w-1/2 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
+            <h1 className="font-bold text-3xl">Withdraw</h1>
             <input
               value={withdraw}
               onChange={(val) => setWithdraw(val.target.value)}
@@ -192,7 +192,7 @@ const Deposit = () => {
             />
             <div
               onClick={() => withdrawTokens()}
-              className="w-full p-3 bg-[#F1E9D2] text-black rounded-xl cursor-pointer text-center"
+              className="w-full p-3 bg-gray-500 rounded-xl cursor-pointer text-center"
             >
               Withdraw
             </div>
