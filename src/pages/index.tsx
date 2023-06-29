@@ -152,13 +152,13 @@ const Deposit = () => {
   return (
     <main className="w-full min-h-screen bg-white">
       <Navbar />
-      <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col md:flex-row flex items-center justify-center bg-white">
+      <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col md:flex-row flex items-start justify-center bg-white">
         <div className="w-full h-full flex justify-center md:justify-end items-center">
-          <div className="w-8/12 flex justify-end  items-center">
+          <div className="w-11/12 flex justify-end  items-center">
             <Pool />
           </div>
         </div>
-        <div className="w-full h-full flex justify-center items-center md:items-start flex-col space-y-6">
+        <div className="w-1/2 h-full flex justify-center items-center md:items-start flex-col space-y-6">
           <div className="w-8/12 text-black p-4">
             <h1>Total Assets</h1>
             <p className="text-2xl font-bold">

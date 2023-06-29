@@ -25,3 +25,23 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.bg-sand-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(68 64 60/var(--tw-bg-opacity));
+}
+
+.bg-sand-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(41 37 36/var(--tw-bg-opacity));
+}
+
+.bg-mustard-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 233 210/var(--tw-bg-opacity));
+}
+
+.bg-sand-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 245 244/var(--tw-bg-opacity));
+}

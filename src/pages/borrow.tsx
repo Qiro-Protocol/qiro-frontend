@@ -10,22 +10,28 @@ import { Pool } from '@/components/pool'
 export default function Borrow() {
   const [borrow, setBorrow] = useState("")
   const [times, setTimes] = useState(new Array(100))
-  const [loans, setLoans] = useState<any[]>([])
+  const [loans, setLoans] = useState<any[]>([
+    {
+      borrowAmount: "1000000000000000000000000",
+      repaidAmount: "1000000000000000000000000",
+      timePeriod: 12
+    }
+  ])
 
   useEffect(() => console.log(times), [times])
 
   const { address } = useAccount()
   
-  const { data, isError, isLoading } = useContractRead({
-    address: QIRO_ADDRESS,
-    abi: QIRO_POOL_ABI,
-    functionName: 'getUserBorrowDetails',
-    args: [address],
-    onSuccess: (data) => {
-      console.log(data)
-      setLoans(data as any[])
-    }
-  })
+  // const { data, isError, isLoading } = useContractRead({
+  //   address: QIRO_ADDRESS,
+  //   abi: QIRO_POOL_ABI,
+  //   functionName: 'getUserBorrowDetails',
+  //   args: [address],
+  //   onSuccess: (data) => {
+  //     console.log(data)
+  //     setLoans(data as any[])
+  //   }
+  // })
 
   const publicClient = usePublicClient()
   const { data: client } = useWalletClient()
@@ -129,9 +135,9 @@ export default function Borrow() {
   return (
     <main className="w-full min-h-screen bg-white">
       <Navbar />
-      <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col md:flex-row flex justify-center items-center">
+      <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col md:flex-row flex justify-center items-start">
       <div className="w-full h-full flex justify-center md:justify-end items-start">
-        <div className="w-8/12 flex justify-center items-center">
+        <div className="w-11/12 flex justify-center items-center">
           <Pool />
         </div>
       </div>
@@ -144,10 +150,10 @@ export default function Borrow() {
         <div className='w-8/12 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md'>
           <h1 className='font-bold text-3xl text-black mb-4'>Your Loans</h1>
           {loans.map((loan, idx) => (
-            <div className='w-11/12 flex border-b p-2 justify-between items-center'>
+            <div className='w-11/12 flex border-b justify-between items-center'>
               <div className='text-black'>
                 <p className='text-sm text-gray-800'>Borrow Amount</p>
-                <h1 className='text-2xl font-bold'>${formatUnits(loan.borrowAmount.toString(), 18)}</h1>
+                <h1 className='text-2xl font-bold'>${Number(formatUnits(loan.borrowAmount.toString(), 18)).toFixed(2)}</h1>
                 <p className='text-sm text-gray-800'>Repaid Amount</p>
                 <h1 className='text-2xl font-bold'>${Number(formatUnits(loan.repaidAmount.toString(), 18)).toFixed(2)}</h1>
                 <p className='text-sm text-gray-800'>Tenure</p>
