@@ -10,28 +10,22 @@ import { Pool } from '@/components/pool'
 export default function Borrow() {
   const [borrow, setBorrow] = useState("")
   const [times, setTimes] = useState(new Array(100))
-  const [loans, setLoans] = useState<any[]>([
-    {
-      borrowAmount: "1000000000000000000000000",
-      repaidAmount: "1000000000000000000000000",
-      timePeriod: 12
-    }
-  ])
+  const [loans, setLoans] = useState<any[]>([])
 
   useEffect(() => console.log(times), [times])
 
   const { address } = useAccount()
   
-  // const { data, isError, isLoading } = useContractRead({
-  //   address: QIRO_ADDRESS,
-  //   abi: QIRO_POOL_ABI,
-  //   functionName: 'getUserBorrowDetails',
-  //   args: [address],
-  //   onSuccess: (data) => {
-  //     console.log(data)
-  //     setLoans(data as any[])
-  //   }
-  // })
+  const { data, isError, isLoading } = useContractRead({
+    address: QIRO_ADDRESS,
+    abi: QIRO_POOL_ABI,
+    functionName: 'getUserBorrowDetails',
+    args: [address],
+    onSuccess: (data) => {
+      console.log(data)
+      setLoans(data as any[])
+    }
+  })
 
   const publicClient = usePublicClient()
   const { data: client } = useWalletClient()

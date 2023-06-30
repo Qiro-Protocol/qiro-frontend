@@ -1,4 +1,35 @@
+import { QIRO_ADDRESS, QIRO_POOL_ABI } from "@/lib/config";
+import { useState } from "react";
+import { formatUnits } from "viem";
+import { useContractRead } from "wagmi";
+
 export const Pool = () => {
+    const [principal, setPrincipal] = useState("0")
+    const [interest, setInterest] = useState("0")
+    
+    const _ = useContractRead({
+        address: QIRO_ADDRESS,
+        abi: QIRO_POOL_ABI,
+        functionName: "totalDeposit",
+        args: [],
+        onSuccess: (data: any) => {
+          setPrincipal(formatUnits(data, 18));
+        },
+        onError: (e) => {
+            console.log(e, "error")
+        }
+      });
+      
+      const __ = useContractRead({
+        address: QIRO_ADDRESS,
+        abi: QIRO_POOL_ABI,
+        functionName: "totalInterestCollected",
+        args: [],
+        onSuccess: (data: any) => {
+          setInterest(formatUnits(data, 18));
+        },
+      });
+
     const riskMitigation = [
         {
             title: "Deal Structure",
@@ -6,29 +37,29 @@ export const Pool = () => {
             desc: "On-chain capital for this pool is being raised into a single tranche"
         },
         {
-            title: "Deal Structure",
-            subtitle: "Unitranche",
-            desc: "On-chain capital for this pool is being raised into a single tranche"
+            title: "On-chain capital priority",
+            subtitle: "Senior",
+            desc: "The capital invested in this pool will be repaid pari passu with other senior debt, if any, raised by the company"
         },
         {
-            title: "Deal Structure",
-            subtitle: "Unitranche",
-            desc: "On-chain capital for this pool is being raised into a single tranche"
+            title: "Off-chain capital priority",
+            subtitle: "Senior",
+            desc: "The capital invested in this pool will be repaid pari passu with other senior debt, if any, raised by the company"
         },
         {
-            title: "Deal Structure",
-            subtitle: "Unitranche",
-            desc: "On-chain capital for this pool is being raised into a single tranche"
+            title: "Recourse to borrower",
+            subtitle: "",
+            desc: "Yes"
         },
         {
-            title: "Deal Structure",
-            subtitle: "Unitranche",
-            desc: "On-chain capital for this pool is being raised into a single tranche"
+            title: "Post-close reporting",
+            subtitle: "",
+            desc: "Investors can access borrower-related updated via the investment-gated Discord Channel"
         },
         {
-            title: "Deal Structure",
-            subtitle: "Unitranche",
-            desc: "On-chain capital for this pool is being raised into a single tranche"
+            title: "Legal recourse",
+            subtitle: "Loan agreement",
+            desc: "Specifies the loan terms agreed to by the borrower and all investors; legally enforceable off-chain"
         },
     ]
 
@@ -46,7 +77,7 @@ export const Pool = () => {
                 <div className="w-full px-4 pb-4">
                     <p>
                         The Senior Pool is a pool of capital that is diversified
-                        across all Borrower Pools on the Goldfinch protocol.
+                        across all Borrower Pools on the Qiro protocol.
                         Liquidity Providers (LPs) who provide capital into the
                         Senior Pool are capital providers in search of passive,
                         diversified exposure across all Borrower Pools. This
@@ -62,7 +93,7 @@ export const Pool = () => {
                     </div>
                     <div className="flex justify-end items-end flex-col">
                         <p className="text-gray-600 text-sm">
-                            Variable GFI APY
+                            Variable QRO APY
                         </p>
                         <h1 className="font-bold text-2xl">0.1%</h1>
                     </div>
@@ -87,19 +118,19 @@ export const Pool = () => {
                 <div className="w-full h-full grid grid-cols-2 rounded-xl grid-rows-2 border border-black">
                     <div className="p-2 border-b border-r border-black">
                         <p className="text-sm text-gray-500">Principal</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">${principal}</h1>
                     </div>
                     <div className="p-2 border-b border-black">
-                        <p className="text-sm text-gray-500">Principal</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <p className="text-sm text-gray-500">Interest</p>
+                        <h1 className="font-bold text-xl">${interest}</h1>
                     </div>
                     <div className="p-2 border-r border-black">
-                        <p className="text-sm text-gray-500">Principal</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <p className="text-sm text-gray-500">Total</p>
+                        <h1 className="font-bold text-xl">${Number(principal) + Number(interest)}</h1>
                     </div>
                     <div className="p-2 border-black">
-                        <p className="text-sm text-gray-500">Principal</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <p className="text-sm text-gray-500">Repayment Status</p>
+                        <h1 className="font-bold text-xl">On Time</h1>
                     </div>
                 </div>
             </div>
@@ -123,15 +154,15 @@ export const Pool = () => {
                         </p>
                     </div>
                     <div className="w-full flex flex-col justify-center text-white items-center space-x-3 bg-sand-700 p-2 rounded-xl">
-                        <h1 className="font-bold text-xl">Asia Fintech Exposure</h1>
+                        <h1 className="font-bold text-xl">Real-world recourse</h1>
                         <p className="text-sm text-center">
-                            Exposure to SMEs in one of the fastest-growing regions in the world
+                            Real-world, legally enforceable loan agreement
                         </p>
                     </div>
                     <div className="w-full flex flex-col justify-center text-white items-center space-x-3 bg-sand-700 p-2 rounded-xl">
-                        <h1 className="font-bold text-xl">Asia Fintech Exposure</h1>
+                        <h1 className="font-bold text-xl">Ongoing monitoring</h1>
                         <p className="text-sm text-center">
-                            Exposure to SMEs in one of the fastest-growing regions in the world
+                            Quarterly reporting and direct-to-borrower communications
                         </p>
                     </div>
                 </div>
@@ -140,34 +171,25 @@ export const Pool = () => {
             <div className="text-black w-full h-full flex flex-col justify-center items-start space-y-3">
                 <h1>Analysis</h1>
 
-                <div className="w-full h-full flex-col flex justify-center items-center">
-                    <div className="w-full flex justify-around text-white items-center space-x-3 bg-sand-800 p-2 rounded-xl">
-                        <h1 className="font-bold text-xl">Quarterly Redemption Option</h1>
-                        <p className="text-sm">
-                            Investors can demand early repayment every quarter. This pool provides investors with the right to redeem (aka "call back") on a quarterly basis. 60 days notice is required for any calls. 
-                        </p>
+                <div className="w-full h-full grid grid-cols-2 rounded-xl grid-rows-2 border border-black">
+                    <div className="p-2 border-b border-r border-black">
+                        <p className="text-sm text-gray-500">Probability of Default</p>
+                        <h1 className="font-bold text-xl">0.5%</h1>
+                    </div>
+                    <div className="p-2 border-b border-black">
+                        <p className="text-sm text-gray-500">Loss Given Default</p>
+                        <h1 className="font-bold text-xl">30%</h1>
+                    </div>
+                    <div className="p-2 border-r border-black">
+                        <p className="text-sm text-gray-500">Expected Loss</p>
+                        <h1 className="font-bold text-xl">${Number(principal) + Number(interest) * 0.05 * 0.3}</h1>
+                    </div>
+                    <div className="p-2 border-black">
+                        <p className="text-sm text-gray-500">Credit Rating</p>
+                        <h1 className="font-bold text-xl">AA - Excellent</h1>
                     </div>
                 </div>
-                <div className="w-full h-full flex justify-center items-center space-x-2">
-                    <div className="w-full flex flex-col justify-center text-white items-center space-x-3 bg-sand-700 p-2 rounded-xl">
-                        <h1 className="font-bold text-xl">Asia Fintech Exposure</h1>
-                        <p className="text-sm">
-                            Exposure to SMEs in one of the fastest-growing regions in the world
-                        </p>
-                    </div>
-                    <div className="w-full flex flex-col justify-center text-white items-center space-x-3 bg-sand-700 p-2 rounded-xl">
-                        <h1 className="font-bold text-xl">Asia Fintech Exposure</h1>
-                        <p className="text-sm">
-                            Exposure to SMEs in one of the fastest-growing regions in the world
-                        </p>
-                    </div>
-                    <div className="w-full flex flex-col justify-center text-white items-center space-x-3 bg-sand-700 p-2 rounded-xl">
-                        <h1 className="font-bold text-xl">Asia Fintech Exposure</h1>
-                        <p className="text-sm">
-                            Exposure to SMEs in one of the fastest-growing regions in the world
-                        </p>
-                    </div>
-                </div>
+                <p className="w-fit text-sm p-2 bg-sand-100 rounded-xl">Detailed Report</p>
             </div>
 
             <div className="text-black w-full h-full flex flex-col justify-center items-start space-y-3">
@@ -176,27 +198,27 @@ export const Pool = () => {
                 <div className="w-full h-full grid grid-cols-3 rounded-xl grid-rows-2 border border-black">
                     <div className="p-2 border-b border-r border-black">
                         <p className="text-sm text-gray-500">Loan term</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">12 Months</h1>
                     </div>
                     <div className="p-2 border-b border-r border-black">
                         <p className="text-sm text-gray-500">Term start date</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">1 July, 2023</h1>
                     </div>
                     <div className="p-2 border-b border-black">
                         <p className="text-sm text-gray-500">Loan maturity date</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">1 July, 2024</h1>
                     </div>
                     <div className="p-2 border-r border-black">
                         <p className="text-sm text-gray-500">Repayment structure</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">Monthly</h1>
                     </div>
                     <div className="p-2 border-r border-black">
                         <p className="text-sm text-gray-500">Payment Frequency</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">1 Month</h1>
                     </div>
                     <div className="p-2 border-black">
                         <p className="text-sm text-gray-500">Total payments</p>
-                        <h1 className="font-bold text-xl">$1.000000000</h1>
+                        <h1 className="font-bold text-xl">12</h1>
                     </div>
                 </div>
             </div>
@@ -238,12 +260,12 @@ export const Pool = () => {
 
                 <div className="w-full h-full flex flex-col justify-center items-center space-y-4">
                     {riskMitigation.map(value => (
-                        <div className="w-full h-full border-b flex justify-between items-center">
-                            <div>
+                        <div className="w-full h-full border-b flex justify-center items-center mb-2">
+                            <div className="flex justify-start items-center w-full">
                                 <h1 className="font-bold text-xl">{value.title}</h1>
                             </div>
-                            <div className="space-y-1">
-                                <h1>{value.subtitle}</h1>
+                            <div className="space-y-1 w-full flex-start">
+                                {value.subtitle.length > 0 && <h1 className="font-semibold">{value.subtitle}</h1>}
                                 <p className="text-sm font-gray-500">{value.desc}</p>
                             </div>
                         </div>
