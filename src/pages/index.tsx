@@ -1,8 +1,10 @@
-import { Pool } from "@/components/pool";
-import { Navbar } from "../components/navbar";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 import {
   useAccount,
   useContractRead,
+  useContractWrite,
+  usePrepareContractWrite,
   usePublicClient,
   useWalletClient,
 } from "wagmi";
@@ -15,6 +17,38 @@ import {
 } from "@/lib/config";
 import { useEffect, useState } from "react";
 import { formatUnits, parseUnits } from "viem";
+import Link from "next/link";
+
+const Box = ({ children }: any) => {
+    return (
+        <div className="w-11/12 h-full flex flex-col md:flex-row justify-center items-center p-5 border space-y-5 md:space-y-0 space-x-0 md:space-x-5">
+            {children}
+        </div>
+    )
+}
+
+const ComingSoon = () => {
+  return (
+    <Box>
+      <h1 className="text-3xl">Rikvin Capital: Real estate bridge loans</h1>
+      <div className="w-full h-full flex justify-center items-center">
+          <div className="w-1/3 text-center py-5 h-full border flex flex-col justify-center items-center">
+              <h1>Total Loan Amount</h1>
+              <h1 className="text-xl font-bold">0$</h1>
+          </div>
+          <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+              <h1>Loan term</h1>
+              <h1 className="text-xl font-bold">12 Months</h1>
+          </div>
+          <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+              <h1>APY</h1>
+              <h1 className="text-xl font-bold">12%</h1>
+          </div>
+      </div>
+      <Link href="/" className="p-5 rounded-xl cursor-pointer text-center bg-[#ff8802]">Coming Soon...</Link>
+  </Box>
+  )
+}
 
 const Deposit = () => {
   const [deposit, setDeposit] = useState("");
@@ -23,7 +57,7 @@ const Deposit = () => {
   const [poolBalance, setPoolBalance] = useState(0);
 
   const { data: client } = useWalletClient();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
   const { data, isError, isLoading } = useContractRead({
     address: TEST_ERC20,
@@ -149,55 +183,118 @@ const Deposit = () => {
     }
   };
 
+  const [principal, setPrincipal] = useState("0")
+    const [interest, setInterest] = useState("0")
+    
+    const ___ = useContractRead({
+        address: QIRO_ADDRESS,
+        abi: QIRO_POOL_ABI,
+        functionName: "totalDeposit",
+        args: [],
+        onSuccess: (data: any) => {
+          setPrincipal(formatUnits(data, 18));
+        },
+        onError: (e) => {
+            console.log(e, "error")
+        }
+      });
+      
+      const __ = useContractRead({
+        address: QIRO_ADDRESS,
+        abi: QIRO_POOL_ABI,
+        functionName: "totalInterestCollected",
+        args: [],
+        onSuccess: (data: any) => {
+          setInterest(formatUnits(data, 18));
+        },
+      });
+
+      const { config, error } = usePrepareContractWrite({
+        address: TEST_ERC20,
+        abi: ERC20_ABI,
+        functionName: "mint",
+        gas: 10000000n,
+        args: [address, 100000000000000000000n],
+      })
+    
+      const { write, isLoading: _isLoading, isSuccess, isError: _isError } = useContractWrite(config)
+    
+      const mint = () => {
+        if(!error && isConnected) {
+          write?.()
+        }
+      }
+    
+      const [toastId, setToastId] = useState<string>()
+    
+      useEffect(() => {
+        if(_isLoading) {
+          setToastId(toast.loading("Minting 100 test tokens"))
+        }
+      }, [_isLoading])
+    
+      useEffect(() => {
+        console.log(isSuccess, toastId, _isError)
+        if(isSuccess && toastId) {
+          toast.success("Successfully minted 100 test tokens", {
+            id: toastId
+          })
+        }
+    
+        if(_isError && toastId) {
+          toast.error("Cannot mint 100 test tokens", {
+            id: toastId
+          })
+        }
+      }, [isSuccess, _isError])
+    
+
   return (
-    <main className="w-full min-h-screen bg-white">
-      <Navbar />
-      <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col md:flex-row flex items-start justify-center bg-white">
-        <div className="w-full h-full flex justify-center md:justify-end items-center">
-          <div className="w-11/12 flex justify-end  items-center">
-            <Pool />
-          </div>
+    <main className="w-full text-black min-h-screen bg-white">
+      <div className="w-full flex-col md:flex-row flex justify-center md:justify-between text-black items-center">
+        <div className="w-full pl-0 md:pl-20 h-20 flex justify-center md:justify-start items-center">
+          <Link className="text-2xl font-bold" href="/">Qiro</Link>
         </div>
-        <div className="w-1/2 h-full flex justify-center items-center md:items-start flex-col space-y-6">
-          <div className="w-8/12 text-black p-4">
-            <h1>Total Assets</h1>
-            <p className="text-2xl font-bold">
-              ${Number(formatUnits(BigInt(poolBalance), 18)).toFixed(2)}
-            </p>
-          </div>
-          <div className="w-8/12 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
-            <h1 className="font-bold text-3xl text-black">Deposit</h1>
-            <input
-              value={deposit}
-              onChange={(val) => setDeposit(val.target.value)}
-              type="number"
-              className="text-black w-full p-3 border rounded-xl"
-              placeholder="Enter deposit amount"
-            />
-            <div
-              onClick={() => depositTokens()}
-              className="w-full p-3 bg-[#F1E9D2] text-black rounded-xl cursor-pointer text-center"
-            >
-              Deposit
-            </div>
-          </div>
-          <div className="w-8/12 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
-            <h1 className="font-bold text-3xl text-black">Withdraw</h1>
-            <input
-              value={withdraw}
-              onChange={(val) => setWithdraw(val.target.value)}
-              type="number"
-              className="text-black w-full p-3 border rounded-xl"
-              placeholder="Enter withdraw amount"
-            />
-            <div
-              onClick={() => withdrawTokens()}
-              className="w-full p-3 bg-[#F1E9D2] text-black rounded-xl cursor-pointer text-center"
-            >
-              Withdraw
-            </div>
-          </div>
+        <div className="w-full h-full mb-5 md:m-0 p-0 md:pr-20 h-20 flex-col md:flex-row flex justify-center md:justify-end items-center space-y-3 md:space-y-0 space-x-0 md:space-x-4">
+          <div onClick={() => mint()} className="cursor-pointer">Mint</div>
+          <ConnectButton />
         </div>
+      </div>
+      <main className="space-y-10 w-full min-h-screen flex-col flex items-center justify-start bg-white">
+        <Box>
+            <div className="w-1/3 text-center py-5 h-full border flex flex-col justify-center items-center">
+                <h1>Total Loans</h1>
+                <h1 className="text-xl font-bold">{principal}$</h1>
+            </div>
+            <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+                <h1>Interest Earned</h1>
+                <h1 className="text-xl font-bold">{interest}$</h1>
+            </div>
+            <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+                <h1>Default rate</h1>
+                <h1 className="text-xl font-bold">10000$</h1>
+            </div>
+        </Box>
+        <Box>
+            <h1 className="text-3xl">Rikvin Capital: Real estate bridge loans</h1>
+            <div className="w-full h-full flex justify-center items-center">
+                <div className="w-1/3 text-center py-5 h-full border flex flex-col justify-center items-center">
+                    <h1>Total Loan Amount</h1>
+                    <h1 className="text-xl font-bold">{principal}$</h1>
+                </div>
+                <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+                    <h1>Loan term</h1>
+                    <h1 className="text-xl font-bold">12 Months</h1>
+                </div>
+                <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+                    <h1>APY</h1>
+                    <h1 className="text-xl font-bold">12%</h1>
+                </div>
+            </div>
+            <Link href="/pool" className="p-5 rounded-xl cursor-pointer text-center bg-[#ff8802]">Enter Pool</Link>
+        </Box>
+        <ComingSoon />
+        <ComingSoon />
       </main>
     </main>
   );
