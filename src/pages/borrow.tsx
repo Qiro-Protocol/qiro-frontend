@@ -28,10 +28,10 @@ export default function Borrow() {
     const { address } = useAccount()
 
 	const _ = useContractRead({
-        address: TEST_ERC20,
-        abi: ERC20_ABI,
-        functionName: "balanceOf",
-        args: [QIRO_ADDRESS],
+        address: QIRO_ADDRESS,
+        abi: QIRO_POOL_ABI,
+        functionName: "lpPool",
+        args: [],
         onSuccess: (data) => {
             setBalance(Number(data))
         },
@@ -190,40 +190,46 @@ export default function Borrow() {
                             Your Loans
                         </h1>
                         {loans.map((loan, idx) => (
-                            <div className="w-11/12 flex border-b justify-between items-center">
-                                <div className="text-black">
-                                    <p className="text-sm text-gray-800">
-                                        Borrow Amount
-                                    </p>
-                                    <h1 className="text-2xl font-bold">
-                                        $
-                                        {Number(
-                                            formatUnits(
-                                                loan.borrowAmount.toString(),
-                                                18
-                                            )
-                                        ).toFixed(2)}
-                                    </h1>
-                                    <p className="text-sm text-gray-800">
-                                        Repaid Amount
-                                    </p>
-                                    <h1 className="text-2xl font-bold">
-                                        $
-                                        {Number(
-                                            formatUnits(
-                                                loan.repaidAmount.toString(),
-                                                18
-                                            )
-                                        ).toFixed(2)}
-                                    </h1>
-                                    <p className="text-sm text-gray-800">
-                                        Tenure
-                                    </p>
-                                    <h1 className="text-2xl font-bold">
-                                        {loan.timePeriod.toString()} Months
-                                    </h1>
+                            <div className="w-11/12 flex flex-col border rounded-xl p-4 justify-between items-center">
+                                <div className="text-black flex border-b mb-3 justify-start items-center space-x-4">
+                                    <div className="text-center">
+                                        <p className="text-sm text-gray-800">
+                                            Borrow Amount
+                                        </p>
+                                        <h1 className="text-2xl font-bold">
+                                            $
+                                            {Number(
+                                                formatUnits(
+                                                    loan.borrowAmount.toString(),
+                                                    18
+                                                )
+                                            ).toFixed(2)}
+                                        </h1>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-sm text-gray-800">
+                                            Repaid Amount
+                                        </p>
+                                        <h1 className="text-2xl font-bold">
+                                            $
+                                            {Number(
+                                                formatUnits(
+                                                    loan.repaidAmount.toString(),
+                                                    18
+                                                )
+                                            ).toFixed(2)}
+                                        </h1>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-sm text-gray-800">
+                                            Tenure
+                                        </p>
+                                        <h1 className="text-2xl font-bold">
+                                            {loan.timePeriod.toString()} Months
+                                        </h1>
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-2 text-center">
 									<label htmlFor="pool" className="text-black">Enter repay months</label>
                                     <input
 										name="pool"
@@ -231,6 +237,7 @@ export default function Borrow() {
                                         onChange={(e) =>
                                             setTimes((times) => {
                                                 const [...t] = times
+                                                if(Number(e.target.value) > 12) e.target.value = "12"
                                                 t[idx] = Number(e.target.value)
                                                 return t
                                             })
@@ -239,6 +246,19 @@ export default function Borrow() {
                                         className="text-black w-full p-2 border rounded-xl"
                                         placeholder="Enter repay month"
                                     />
+                                    {times[idx] &&
+                                        <p className="text-black">You will be paying: {(((Number(
+                                            formatUnits(
+                                                loan.borrowAmount.toString(),
+                                                18
+                                            )
+                                        ) / 12) * times[idx]) + (times[idx] * (Number(
+                                            formatUnits(
+                                                loan.borrowAmount.toString(),
+                                                18
+                                            )
+                                        )) * 0.01)).toFixed(2)}</p>
+                                    }
                                     <div
                                         onClick={() =>
                                             repayLoans(

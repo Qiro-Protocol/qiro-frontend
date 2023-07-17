@@ -36,10 +36,10 @@ const Deposit = () => {
   });
 
   const _ = useContractRead({
-    address: TEST_ERC20,
-    abi: ERC20_ABI,
-    functionName: "balanceOf",
-    args: [QIRO_ADDRESS],
+    address: QIRO_ADDRESS,
+    abi: QIRO_POOL_ABI,
+    functionName: "lpPool",
+    args: [],
     onSuccess: (data) => {
       setPoolBalance(Number(data));
     },
