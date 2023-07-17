@@ -27,22 +27,22 @@ const Box = ({ children }: any) => {
     )
 }
 
-const ComingSoon = (props: {name: string}) => {
+const ComingSoon = (props: {name: string, amount: string, tenure: string, percent: string}) => {
   return (
     <Box>
       <h1 className="text-3xl">{props.name}</h1>
       <div className="w-full h-full flex justify-center items-center space-x-3">
           <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Total Loan Amount</h1>
-              <h1 className="text-xl font-bold">0$</h1>
+              <h1 className="text-xl font-bold">${props.amount}</h1>
           </div>
           <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Loan term</h1>
-              <h1 className="text-xl font-bold">12 Months</h1>
+              <h1 className="text-xl font-bold">{props.tenure}</h1>
           </div>
           <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>APY</h1>
-              <h1 className="text-xl font-bold">12%</h1>
+              <h1 className="text-xl font-bold">{props.percent}%</h1>
           </div>
       </div>
       <Link href="/" className="w-40 py-4 text-sm rounded-xl cursor-pointer text-center bg-[#ff8802]">Coming Soon...</Link>
@@ -264,11 +264,11 @@ const Deposit = () => {
         <Box>
             <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Total Active Loans</h1>
-                <h1 className="text-xl font-bold">{principal}$</h1>
+                <h1 className="text-xl font-bold">${principal}</h1>
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Interest Earned</h1>
-                <h1 className="text-xl font-bold">{interest}$</h1>
+                <h1 className="text-xl font-bold">${interest}</h1>
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Default rate</h1>
@@ -280,7 +280,7 @@ const Deposit = () => {
             <div className="w-full h-full flex justify-center items-center space-x-3">
                 <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Total Loan Amount</h1>
-                    <h1 className="text-xl font-bold">{principal}$</h1>
+                    <h1 className="text-xl font-bold">${principal}</h1>
                 </div>
                 <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Loan term</h1>
@@ -293,8 +293,8 @@ const Deposit = () => {
             </div>
             <Link href="/pool" className="w-40 py-4 text-sm rounded-xl cursor-pointer text-center bg-[#ff8802]">Enter Pool</Link>
         </Box>
-        <ComingSoon name="Unimoni: Gold backed loans in India" />
-        <ComingSoon name="DigiAsia: Fintech Lending in Indonesia" />
+        <ComingSoon name="Unimoni: Gold backed loans in India" amount="50,000,000" tenure="1.5 years" percent="12.5" />
+        <ComingSoon name="DigiAsia: Fintech Lending in Indonesia" amount="10,000,000" tenure="6 months" percent="10.5" />
       </main>
     </main>
   );
