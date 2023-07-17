@@ -76,9 +76,10 @@ export const Pool = () => {
 
                 <div className="w-full px-4 pb-4">
                     <p>
-                        Proceeds from this pool would be used by Rikvin Capital to private financing in the form of short-term loans, secured against an asset such as property or shares. 
-                        Proceeds from this pool would be used by Rikvin Capital to private financing in the form of short-term loans, secured against an asset such as property or shares. 
-                        Proceeds from this pool would be used by Rikvin Capital to private financing in the form of short-term loans, secured against an asset such as property or shares. 
+                        Proceeds from this pool would be used by Rikvin Capital to private financing in the form of short-term loans, fully secured against an asset such as property or shares. All the borrowers in this pool are HNIs or real estate developers based in Singapore & UK. Senior capital in this pool is protected by 20% junior capital invested by asset originators & underwriters.
+                        <br />
+                        <br />
+                        <br />
                     </p>
                 </div>
 

@@ -379,13 +379,13 @@ const Deposit = () => {
                             </div>
                             <div className="p-2 border-b border-black">
                                 <p className="text-sm text-gray-500">
-                                    Loss Given Default
+                                    Loss Given Default (predicted)
                                 </p>
                                 <h1 className="font-bold text-xl">30%</h1>
                             </div>
                             <div className="p-2 border-r border-black">
                                 <p className="text-sm text-gray-500">
-                                    Expected Loss
+                                    Expected Loss (if defaulted)
                                 </p>
                                 <h1 className="font-bold text-xl">
                                     $
@@ -438,13 +438,13 @@ const Deposit = () => {
 									<p className="text-sm text-gray-500">
 										Repayment structure
 									</p>
-									<h1 className="font-bold text-xl">Monthly</h1>
+									<h1 className="font-bold text-xl">Bullet</h1>
 								</div>
 								<div className="p-2 border-r border-black">
 									<p className="text-sm text-gray-500">
-										Payment Frequency
+										Repayment Frequency
 									</p>
-									<h1 className="font-bold text-xl">1 Month</h1>
+									<h1 className="font-bold text-xl">Monthly</h1>
 								</div>
 								<div className="p-2 border-black">
 									<p className="text-sm text-gray-500">
