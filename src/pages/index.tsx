@@ -272,7 +272,7 @@ const Deposit = () => {
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Default rate</h1>
-                <h1 className="text-xl font-bold">10000$</h1>
+                <h1 className="text-xl font-bold">0%</h1>
             </div>
         </Box>
         <Box>
