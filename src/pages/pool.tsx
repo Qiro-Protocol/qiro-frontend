@@ -21,6 +21,7 @@ const Deposit = () => {
     const [withdraw, setWithdraw] = useState("")
     const [balance, setBalance] = useState(0)
     const [poolBalance, setPoolBalance] = useState(0)
+	const [deposited, setDeposited] = useState(0)
 
     const { data: client } = useWalletClient()
     const { address } = useAccount()
@@ -35,13 +36,23 @@ const Deposit = () => {
         },
     })
 
-    const _ = useContractRead({
+	const ____ = useContractRead({
         address: TEST_ERC20,
         abi: ERC20_ABI,
         functionName: "balanceOf",
         args: [QIRO_ADDRESS],
         onSuccess: (data) => {
             setPoolBalance(Number(data))
+        },
+    })
+
+    const _ = useContractRead({
+        address: QIRO_ADDRESS,
+        abi: QIRO_POOL_ABI,
+        functionName: "balanceOf",
+        args: [address],
+        onSuccess: (data) => {
+            setDeposited(Number(data))
         },
     })
 
@@ -185,29 +196,24 @@ const Deposit = () => {
             desc: "On-chain capital for this pool is being raised into a single tranche",
         },
         {
-            title: "On-chain capital priority",
-            subtitle: "Senior",
-            desc: "The capital invested in this pool will be repaid pari passu with other senior debt, if any, raised by the company",
-        },
-        {
-            title: "Off-chain capital priority",
-            subtitle: "Senior",
-            desc: "The capital invested in this pool will be repaid pari passu with other senior debt, if any, raised by the company",
-        },
-        {
-            title: "Recourse to borrower",
+            title: "Post disbursement reporting",
             subtitle: "",
-            desc: "Yes",
+            desc: "Integrations into Loan management system for tracking and alerts",
         },
         {
-            title: "Post-close reporting",
+            title: "Collateral",
             subtitle: "",
-            desc: "Investors can access borrower-related updated via the investment-gated Discord Channel",
+            desc: "Overcollateralized off-chain",
+        },
+        {
+            title: "LTV(Loan-To-Value)",
+            subtitle: "",
+            desc: "75%",
         },
         {
             title: "Legal recourse",
             subtitle: "Loan agreement",
-            desc: "Specifies the loan terms agreed to by the borrower and all investors; legally enforceable off-chain",
+            desc: "Legal agreement with borrowers enforceable off-chain",
         },
     ]
 
@@ -216,8 +222,8 @@ const Deposit = () => {
             <Navbar />
             <main className="space-y-10 md:space-y-0 space-x-0 md:space-x-10 w-full min-h-screen flex-col flex justify-center items-start">
                 <div className="w-full h-full flex space-x-10">
-					<div className="w-full h-full flex justify-center items-center">
-						<div className="w-11/12 flex justify-center items-center">
+					<div className="w-full h-full flex justify-center items-center flex-col space-y-6">
+						<div className="w-11/12 space-y-3 h-full flex justify-center items-center flex-col p-5 rounded-md">
 							<Pool />
 						</div>
 					</div>
@@ -256,12 +262,18 @@ const Deposit = () => {
                             <input
                                 value={withdraw}
                                 onChange={(val) =>
-                                    setWithdraw(val.target.value)
+                                    Number(val.target.value) > Number(formatUnits(BigInt(deposited), 18)) ? undefined : setWithdraw(val.target.value)
                                 }
                                 type="number"
                                 className="text-black w-full p-3 border rounded-xl"
                                 placeholder="Enter withdraw amount"
                             />
+							<div className="w-full flex justify-end items-center space-x-1 text-sm">
+								<p className="text-gray-500 text-right">
+									Your balance - ${Number(formatUnits(BigInt(deposited), 18))}
+								</p>
+								<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setWithdraw(Number(formatUnits(BigInt(poolBalance), 18)) < Number(formatUnits(BigInt(deposited), 18)) ? formatUnits(BigInt(poolBalance), 18) : formatUnits(BigInt(deposited), 18))}>Max</p>
+							</div>
                             <div
                                 onClick={() => withdrawTokens()}
                                 className="w-full p-3 bg-[#ff8802] text-black rounded-xl cursor-pointer text-center"
@@ -307,7 +319,7 @@ const Deposit = () => {
                         </div>
                     </div>
 
-                    <div className="text-black w-11/12 h-full flex flex-col justify-center items-start space-y-3">
+                    {/* <div className="text-black w-11/12 h-full flex flex-col justify-center items-start space-y-3">
                         <h1>Highlights</h1>
 
                         <div className="w-full h-full flex-col flex justify-center items-center">
@@ -353,7 +365,7 @@ const Deposit = () => {
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="text-black w-11/12 h-full flex flex-col justify-center items-start space-y-3">
                         <h1>Analysis</h1>
@@ -395,104 +407,96 @@ const Deposit = () => {
                         </p>
                     </div>
 
-                    <div className="text-black w-11/12 h-full flex flex-col justify-center items-start space-y-3">
-                        <h1>Repayment Terms</h1>
+					<div className="w-full h-full flex flex-col justify-center items-start space-y-4">
+						<div className="text-black w-11/12 h-full flex flex-col justify-center items-start space-y-3">
+							<h1>Repayment Terms</h1>
 
-                        <div className="w-full h-full grid grid-cols-3 rounded-xl grid-rows-2 border border-black">
-                            <div className="p-2 border-b border-r border-black">
-                                <p className="text-sm text-gray-500">
-                                    Loan term
-                                </p>
-                                <h1 className="font-bold text-xl">12 Months</h1>
-                            </div>
-                            <div className="p-2 border-b border-r border-black">
-                                <p className="text-sm text-gray-500">
-                                    Term start date
-                                </p>
-                                <h1 className="font-bold text-xl">
-                                    1 July, 2023
-                                </h1>
-                            </div>
-                            <div className="p-2 border-b border-black">
-                                <p className="text-sm text-gray-500">
-                                    Loan maturity date
-                                </p>
-                                <h1 className="font-bold text-xl">
-                                    1 July, 2024
-                                </h1>
-                            </div>
-                            <div className="p-2 border-r border-black">
-                                <p className="text-sm text-gray-500">
-                                    Repayment structure
-                                </p>
-                                <h1 className="font-bold text-xl">Monthly</h1>
-                            </div>
-                            <div className="p-2 border-r border-black">
-                                <p className="text-sm text-gray-500">
-                                    Payment Frequency
-                                </p>
-                                <h1 className="font-bold text-xl">1 Month</h1>
-                            </div>
-                            <div className="p-2 border-black">
-                                <p className="text-sm text-gray-500">
-                                    Total payments
-                                </p>
-                                <h1 className="font-bold text-xl">12</h1>
-                            </div>
-                        </div>
-                    </div>
+							<div className="w-full h-full grid grid-cols-3 rounded-xl grid-rows-2 border border-black">
+								<div className="p-2 border-b border-r border-black">
+									<p className="text-sm text-gray-500">
+										Loan term
+									</p>
+									<h1 className="font-bold text-xl">12 Months</h1>
+								</div>
+								<div className="p-2 border-b border-r border-black">
+									<p className="text-sm text-gray-500">
+										Term start date
+									</p>
+									<h1 className="font-bold text-xl">
+										1 July, 2023
+									</h1>
+								</div>
+								<div className="p-2 border-b border-black">
+									<p className="text-sm text-gray-500">
+										Loan maturity date
+									</p>
+									<h1 className="font-bold text-xl">
+										1 July, 2024
+									</h1>
+								</div>
+								<div className="p-2 border-r border-black">
+									<p className="text-sm text-gray-500">
+										Repayment structure
+									</p>
+									<h1 className="font-bold text-xl">Monthly</h1>
+								</div>
+								<div className="p-2 border-r border-black">
+									<p className="text-sm text-gray-500">
+										Payment Frequency
+									</p>
+									<h1 className="font-bold text-xl">1 Month</h1>
+								</div>
+								<div className="p-2 border-black">
+									<p className="text-sm text-gray-500">
+										Total payments
+									</p>
+									<h1 className="font-bold text-xl">12</h1>
+								</div>
+							</div>
+						</div>
 
-                    <div className="text-black w-11/12 h-fit flex flex-col justify-center items-start space-y-3">
-                        <h1>Borrower Details</h1>
+						<div className="text-black w-11/12 h-fit flex flex-col justify-center items-start space-y-3">
+							<h1>Borrower Details</h1>
 
-                        <div className="w-full p-2 rounded-xl h-full bg-[#ff8802] flex-col flex justify-center items-center">
-                            <div className="w-full h-full flex justify-between items-center">
-                                <div className="w-full h-full flex justify-start p-2 items-center space-x-2">
-                                    <div className="w-10 h-10 rounded-full bg-gray-400"></div>
-                                    <div>
-                                        <h1 className="font-bold text-xl">
-                                            Fazz
-                                        </h1>
-                                        <p className="text-sm text-gray-500">
-                                            Fintech
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="w-full h-full flex justify-end items-center p-2">
-                                    <p className="w-fit text-sm p-1 bg-green-200 rounded-xl">
-                                        Vetted Borrower
-                                    </p>
-                                </div>
-                            </div>
+							<div className="w-full p-2 rounded-xl h-full bg-[#ff8802] flex-col flex justify-center items-center">
+								<div className="w-full h-full flex justify-between items-center">
+									<div className="w-full h-full flex justify-start p-2 items-center space-x-2">
+										<div className="w-10 h-10 rounded-full bg-gray-400"></div>
+										<div>
+											<h1 className="font-bold text-xl">
+												Rikvin Capital
+											</h1>
+											<p className="text-sm text-gray-500">
+												Real Estate Bridge Loans in Singapore
+											</p>
+										</div>
+									</div>
+									<div className="w-full h-full flex justify-end items-center p-2">
+										<p className="w-fit text-sm p-1 bg-green-200 rounded-xl">
+											Vetted Borrower
+										</p>
+									</div>
+								</div>
 
-                            <div className="w-full h-full p-2 text-sm space-y-3">
-                                <p>
-                                    Fazz offers seamless payment, savings, and
-                                    credit solutions, providing businesses of
-                                    all sizes an equal opportunity to build,
-                                    run, and grow in Southeast Asia. The company
-                                    caters to the warung and MSME customer
-                                    segments in Indonesia under the brand Fazz
-                                    Agen, and small to medium-sized businesses
-                                    in Singapore and Indonesia under the brand
-                                    Fazz Business. The company also owns
-                                    StraitsX, the leading stablecoin issuer in
-                                    Singapore and Indonesia
-                                </p>
+								<div className="w-full h-full p-2 text-sm space-y-3">
+									<p>
+										Rikvin Capital provides short term asset-backed financing in Singapore & U.K. Rikvin’s asset based approach to financing sets them apart from conventional lenders and offers specialised options for HNWIs and corporates.
+									</p>
 
-                                <div className="w-full h-full flex justify-start items-center space-x-4">
-                                    <p className="w-fit text-sm p-2 bg-sand-100 rounded-xl">
-                                        Website
-                                    </p>
-                                    <p className="w-fit text-sm p-2 bg-sand-100 rounded-xl">
-                                        Linkedin
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+									<div className="flex justify-start items-center space-x-4">
+										<a href="https://www.rikvincapital.com/" className="w-fit text-sm p-2 bg-sand-100 rounded-xl">
+											Website
+										</a>
+										<a href="https://www.linkedin.com/company/rikvincapital" className="w-fit text-sm p-2 bg-sand-100 rounded-xl">
+											Linkedin
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div className="text-black w-11/12 h-full flex flex-col justify-center items-start space-y-3">
+                    <div className="text-black row-span-2 w-11/12 h-full flex flex-col justify-center items-start space-y-3">
                         <h1>Risk Mitigation</h1>
 
                         <p className="text-sm text-gray-500">
@@ -501,15 +505,15 @@ const Deposit = () => {
                             default on repayment by the borrower
                         </p>
 
-                        <div className="w-full h-full flex flex-col justify-center items-center space-y-4">
+                        <div className="w-full h-full flex flex-col border border-black rounded-xl justify-center items-center">
                             {riskMitigation.map((value) => (
-                                <div className="w-full h-full border-b flex justify-center items-center mb-2">
-                                    <div className="flex justify-start items-center w-full">
+                                <div className="w-full h-20 border-b border-black px-2 flex justify-center items-center">
+                                    <div className="flex justify-start border-r border-black h-full items-center w-full">
                                         <h1 className="font-bold text-xl">
                                             {value.title}
                                         </h1>
                                     </div>
-                                    <div className="space-y-1 w-full flex-start">
+                                    <div className="space-y-1 w-full flex-start pl-3">
                                         {value.subtitle.length > 0 && (
                                             <h1 className="font-semibold">
                                                 {value.subtitle}

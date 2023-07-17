@@ -21,10 +21,21 @@ export default function Borrow() {
     const [borrow, setBorrow] = useState("")
     const [times, setTimes] = useState(new Array(100))
     const [loans, setLoans] = useState<any[]>([])
+	const [balance, setBalance] = useState(0)
 
     useEffect(() => console.log(times), [times])
 
     const { address } = useAccount()
+
+	const _ = useContractRead({
+        address: TEST_ERC20,
+        abi: ERC20_ABI,
+        functionName: "balanceOf",
+        args: [QIRO_ADDRESS],
+        onSuccess: (data) => {
+            setBalance(Number(data))
+        },
+    })
 
     const { data, isError, isLoading } = useContractRead({
         address: QIRO_ADDRESS,
@@ -155,11 +166,18 @@ export default function Borrow() {
                         </h1>
                         <input
                             value={borrow}
-                            onChange={(e) => setBorrow(e.target.value)}
+                            onChange={(e) => Number(e.target.value) > Number(formatUnits(BigInt(balance), 18)) ? undefined : setBorrow(e.target.value)}
                             type="number"
+							max={Number(formatUnits(BigInt(balance), 18))}
                             className="text-black w-full p-3 border rounded-xl"
                             placeholder="Enter borrow amount"
                         />
+						<div className="w-full flex justify-end items-center space-x-1 text-sm">
+							<p className="text-gray-500 text-right">
+								Pool balance - ${Number(formatUnits(BigInt(balance), 18))}
+							</p>
+							<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setBorrow(formatUnits(BigInt(balance), 18))}>Max</p>
+						</div>
                         <div
                             onClick={() => borrowTokens()}
                             className="w-full p-3 bg-[#ff8802] text-black rounded-xl cursor-pointer text-center"
@@ -206,7 +224,9 @@ export default function Borrow() {
                                     </h1>
                                 </div>
                                 <div className="space-y-2">
+									<label htmlFor="pool" className="text-black">Enter repay months</label>
                                     <input
+										name="pool"
                                         value={times[idx]}
                                         onChange={(e) =>
                                             setTimes((times) => {

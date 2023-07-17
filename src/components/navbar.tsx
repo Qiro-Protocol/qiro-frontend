@@ -1,9 +1,9 @@
-import { ERC20_ABI, TEST_ERC20 } from "@/lib/config";
+import { ERC20_ABI, QIRO_ADDRESS, TEST_ERC20 } from "@/lib/config";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useAccount, useContractWrite, usePrepareContractWrite, useWalletClient } from "wagmi";
 
 export const Navbar = () => {
   const { address, isConnected } = useAccount()
@@ -14,6 +14,36 @@ export const Navbar = () => {
     gas: 10000000n,
     args: [address, 100000000000000000000n],
   })
+
+  const { data: walletClient, isError: _iserror, isLoading: _isloading } = useWalletClient()
+
+  const addTokenToPool = async () => {
+    if(walletClient) {
+      await walletClient.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', // Initially only supports ERC20, but eventually more!
+          options: {
+            address: QIRO_ADDRESS, // The address that the token is at.
+            symbol: "QP", // A ticker symbol or shorthand, up to 5 chars.
+            decimals: 18, // The number of decimals in the token
+          },
+        }
+      })
+
+      await walletClient.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', // Initially only supports ERC20, but eventually more!
+          options: {
+            address: TEST_ERC20, // The address that the token is at.
+            symbol: "TESTUSDC", // A ticker symbol or shorthand, up to 5 chars.
+            decimals: 18, // The number of decimals in the token
+          },
+        }
+      })
+    }
+  }
 
   const { write, isLoading, isSuccess, isError } = useContractWrite(config)
 
@@ -55,6 +85,7 @@ export const Navbar = () => {
         <Link href="/borrow">Borrow / Repay</Link>
         <Link href="/pool">Deposit / Withdraw</Link>
         <div onClick={() => mint()} className="cursor-pointer">Mint</div>
+        <div onClick={() => addTokenToPool()} className="cursor-pointer">Add tokens to wallet</div>
         <ConnectButton />
       </div>
     </div>

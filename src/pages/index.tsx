@@ -21,31 +21,31 @@ import Link from "next/link";
 
 const Box = ({ children }: any) => {
     return (
-        <div className="w-11/12 h-full flex flex-col md:flex-row justify-center items-center p-5 border space-y-5 md:space-y-0 space-x-0 md:space-x-5">
+        <div className="w-11/12 h-full flex flex-col md:flex-row justify-center items-center p-5 border rounded-xl space-y-5 md:space-y-0 space-x-0 md:space-x-5">
             {children}
         </div>
     )
 }
 
-const ComingSoon = () => {
+const ComingSoon = (props: {name: string}) => {
   return (
     <Box>
-      <h1 className="text-3xl">Rikvin Capital: Real estate bridge loans</h1>
-      <div className="w-full h-full flex justify-center items-center">
-          <div className="w-1/3 text-center py-5 h-full border flex flex-col justify-center items-center">
+      <h1 className="text-3xl">{props.name}</h1>
+      <div className="w-full h-full flex justify-center items-center space-x-3">
+          <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Total Loan Amount</h1>
               <h1 className="text-xl font-bold">0$</h1>
           </div>
-          <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+          <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Loan term</h1>
               <h1 className="text-xl font-bold">12 Months</h1>
           </div>
-          <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+          <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>APY</h1>
               <h1 className="text-xl font-bold">12%</h1>
           </div>
       </div>
-      <Link href="/" className="p-5 rounded-xl cursor-pointer text-center bg-[#ff8802]">Coming Soon...</Link>
+      <Link href="/" className="w-40 py-4 text-sm rounded-xl cursor-pointer text-center bg-[#ff8802]">Coming Soon...</Link>
   </Box>
   )
 }
@@ -262,39 +262,39 @@ const Deposit = () => {
       </div>
       <main className="space-y-10 w-full min-h-screen flex-col flex items-center justify-start bg-white">
         <Box>
-            <div className="w-1/3 text-center py-5 h-full border flex flex-col justify-center items-center">
-                <h1>Total Loans</h1>
+            <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
+                <h1>Total Active Loans</h1>
                 <h1 className="text-xl font-bold">{principal}$</h1>
             </div>
-            <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+            <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Interest Earned</h1>
                 <h1 className="text-xl font-bold">{interest}$</h1>
             </div>
-            <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+            <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Default rate</h1>
                 <h1 className="text-xl font-bold">10000$</h1>
             </div>
         </Box>
         <Box>
             <h1 className="text-3xl">Rikvin Capital: Real estate bridge loans</h1>
-            <div className="w-full h-full flex justify-center items-center">
-                <div className="w-1/3 text-center py-5 h-full border flex flex-col justify-center items-center">
+            <div className="w-full h-full flex justify-center items-center space-x-3">
+                <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Total Loan Amount</h1>
                     <h1 className="text-xl font-bold">{principal}$</h1>
                 </div>
-                <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+                <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Loan term</h1>
                     <h1 className="text-xl font-bold">12 Months</h1>
                 </div>
-                <div className="w-1/3 text-center py-5  h-full border flex flex-col justify-center items-center">
+                <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>APY</h1>
                     <h1 className="text-xl font-bold">12%</h1>
                 </div>
             </div>
-            <Link href="/pool" className="p-5 rounded-xl cursor-pointer text-center bg-[#ff8802]">Enter Pool</Link>
+            <Link href="/pool" className="w-40 py-4 text-sm rounded-xl cursor-pointer text-center bg-[#ff8802]">Enter Pool</Link>
         </Box>
-        <ComingSoon />
-        <ComingSoon />
+        <ComingSoon name="Unimoni: Gold backed loans in India" />
+        <ComingSoon name="DigiAsia: Fintech Lending in Indonesia" />
       </main>
     </main>
   );
