@@ -46,7 +46,7 @@ export default function Borrow() {
         args: [address],
         onSuccess: (data) => {
             setUserBalance(Number(data))
-        }
+        },
         watch: true
     })
 
