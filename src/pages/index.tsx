@@ -34,7 +34,7 @@ const ComingSoon = (props: {name: string, amount: string, tenure: string, percen
       <div className="w-full h-full flex justify-center items-center space-x-3">
           <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Total Loan Amount</h1>
-              <h1 className="text-xl font-bold">${props.amount}</h1>
+              <h1 className="text-xl font-bold">TUSDC {props.amount}</h1>
           </div>
           <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Loan term</h1>
@@ -99,7 +99,7 @@ const Deposit = () => {
         abi: ERC20_ABI,
         functionName: "approve",
         gas: 10000000n,
-        args: [QIRO_ADDRESS, parseUnits(deposit as `${number}`, 18)],
+        args: [QIRO_ADDRESS, parseUnits(deposit as `TUSDC {number}`, 18)],
       });
 
       await publicClient.waitForTransactionReceipt({
@@ -131,7 +131,7 @@ const Deposit = () => {
         abi: QIRO_POOL_ABI,
         functionName: "deposit",
         gas: 10000000n,
-        args: [parseUnits(deposit as `${number}`, 18), client.account.address],
+        args: [parseUnits(deposit as `TUSDC {number}`, 18), client.account.address],
       });
 
       await publicClient.waitForTransactionReceipt({
@@ -163,7 +163,7 @@ const Deposit = () => {
         functionName: "withdraw",
         gas: 10000000n,
         args: [
-          parseUnits(withdraw as `${number}`, 18),
+          parseUnits(withdraw as `TUSDC {number}`, 18),
           client.account.address,
           client.account.address,
         ],
@@ -264,11 +264,11 @@ const Deposit = () => {
         <Box>
             <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Total Active Loans</h1>
-                <h1 className="text-xl font-bold">${principal}</h1>
+                <h1 className="text-xl font-bold">TUSDC {principal}</h1>
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Interest Earned</h1>
-                <h1 className="text-xl font-bold">${interest}</h1>
+                <h1 className="text-xl font-bold">TUSDC {interest}</h1>
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Default rate</h1>
@@ -280,7 +280,7 @@ const Deposit = () => {
             <div className="w-full h-full flex justify-center items-center space-x-3">
                 <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Total Loan Amount</h1>
-                    <h1 className="text-xl font-bold">${principal}</h1>
+                    <h1 className="text-xl font-bold">TUSDC {principal}</h1>
                 </div>
                 <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Loan term</h1>

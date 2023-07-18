@@ -22,6 +22,7 @@ export default function Borrow() {
     const [times, setTimes] = useState(new Array(100))
     const [loans, setLoans] = useState<any[]>([])
 	const [balance, setBalance] = useState(0)
+    const [userBalance, setUserBalance] = useState(0)
 
     useEffect(() => console.log(times), [times])
 
@@ -35,6 +36,17 @@ export default function Borrow() {
         onSuccess: (data) => {
             setBalance(Number(data))
         },
+        watch: true
+    })
+
+    const __ = useContractRead({
+        address: TEST_ERC20,
+        abi: ERC20_ABI,
+        functionName: "balanceOf",
+        args: [address],
+        onSuccess: (data) => {
+            setUserBalance(Number(data))
+        }
     })
 
     const { data, isError, isLoading } = useContractRead({
@@ -118,7 +130,24 @@ export default function Borrow() {
         }
     }
 
-    const repayLoans = async (id: any, time: number) => {
+    const repayLoans = async (idx: number, id: any, time: number) => {
+        const repayAmount = (((Number(
+            formatUnits(
+                loans[idx].borrowAmount.toString(),
+                18
+            )
+        ) / 12) * times[idx]) + (times[idx] * (Number(
+            formatUnits(
+                loans[idx].borrowAmount.toString(),
+                18
+            )
+        )) * 0.01))
+        
+        if(Number(formatUnits(BigInt(userBalance), 18)) < repayAmount) {
+            toast.error("Your balance is lower")
+            return
+        }
+
         await approveToken()
 
         const toastId = toast.loading("Repaying tokens to pool")
@@ -168,13 +197,14 @@ export default function Borrow() {
                             value={borrow}
                             onChange={(e) => Number(e.target.value) > Number(formatUnits(BigInt(balance), 18)) ? undefined : setBorrow(e.target.value)}
                             type="number"
+                            min={0}
 							max={Number(formatUnits(BigInt(balance), 18))}
                             className="text-black w-full p-3 border rounded-xl"
                             placeholder="Enter borrow amount"
                         />
 						<div className="w-full flex justify-end items-center space-x-1 text-sm">
 							<p className="text-gray-500 text-right">
-								Pool balance - ${Number(formatUnits(BigInt(balance), 18))}
+								Pool balance - TUSDC {Number(formatUnits(BigInt(balance), 18)).toFixed(2)}
 							</p>
 							<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setBorrow(formatUnits(BigInt(balance), 18))}>Max</p>
 						</div>
@@ -197,7 +227,7 @@ export default function Borrow() {
                                             Borrow Amount
                                         </p>
                                         <h1 className="text-2xl font-bold">
-                                            $
+                                            TUSDC 
                                             {Number(
                                                 formatUnits(
                                                     loan.borrowAmount.toString(),
@@ -211,7 +241,7 @@ export default function Borrow() {
                                             Repaid Amount
                                         </p>
                                         <h1 className="text-2xl font-bold">
-                                            $
+                                            TUSDC 
                                             {Number(
                                                 formatUnits(
                                                     loan.repaidAmount.toString(),
@@ -242,6 +272,7 @@ export default function Borrow() {
                                                 return t
                                             })
                                         }
+                                        min={0}
                                         type="number"
                                         className="text-black w-full p-2 border rounded-xl"
                                         placeholder="Enter repay month"
@@ -262,6 +293,7 @@ export default function Borrow() {
                                     <div
                                         onClick={() =>
                                             repayLoans(
+                                                idx,
                                                 loan.borrowId,
                                                 times[idx]
                                             )

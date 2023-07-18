@@ -162,7 +162,7 @@ const Deposit = () => {
           <div className="w-1/2 p-4">
             <h1>Total Assets</h1>
             <p className="text-2xl font-bold">
-              ${formatUnits(BigInt(poolBalance), 18)}
+              TUSDC {formatUnits(BigInt(poolBalance), 18)}
             </p>
           </div>
           <div className="w-1/2 space-y-3 h-full flex justify-center items-center flex-col border p-5 rounded-md">
@@ -171,6 +171,7 @@ const Deposit = () => {
               value={deposit}
               onChange={(val) => setDeposit(val.target.value)}
               type="number"
+              min={0}
               className="text-black w-full p-3 border rounded-xl"
               placeholder="Enter deposit amount"
             />
@@ -187,6 +188,7 @@ const Deposit = () => {
               value={withdraw}
               onChange={(val) => setWithdraw(val.target.value)}
               type="number"
+              min={0}
               className="text-black w-full p-3 border rounded-xl"
               placeholder="Enter withdraw amount"
             />

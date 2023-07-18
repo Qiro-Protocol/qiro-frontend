@@ -128,7 +128,7 @@ const Deposit = () => {
         }
     }
 
-    const withdrawTokens = async () => {
+    const withdrawTokens = async () => {        
         const toastId = toast.loading("Withdrawing tokens in pool")
 
         try {
@@ -231,7 +231,7 @@ const Deposit = () => {
                         {/* <div className="w-8/12 text-black p-4">
                             <h1>Total Assets</h1>
                             <p className="text-2xl font-bold">
-                                $
+                                TUSDC 
                                 {Number(
                                     formatUnits(BigInt(poolBalance), 18)
                                 ).toFixed(2)}
@@ -245,9 +245,16 @@ const Deposit = () => {
                                 value={deposit}
                                 onChange={(val) => setDeposit(val.target.value)}
                                 type="number"
+                                min={0}
                                 className="text-black w-full p-3 border rounded-xl"
                                 placeholder="Enter deposit amount"
                             />
+                            <div className="w-full flex justify-end items-center space-x-1 text-sm">
+								<p className="text-gray-500 text-right">
+									Your balance - TUSDC {Number(formatUnits(BigInt(balance), 18)).toFixed(2)}
+								</p>
+								<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setDeposit(formatUnits(BigInt(balance), 18))}>Max</p>
+							</div>
                             <div
                                 onClick={() => depositTokens()}
                                 className="w-full p-3 bg-[#ff8802] text-black rounded-xl cursor-pointer text-center"
@@ -265,14 +272,16 @@ const Deposit = () => {
                                     Number(val.target.value) > Number(formatUnits(BigInt(deposited), 18)) ? undefined : setWithdraw(val.target.value)
                                 }
                                 type="number"
+                                min={0}
                                 className="text-black w-full p-3 border rounded-xl"
                                 placeholder="Enter withdraw amount"
                             />
 							<div className="w-full flex justify-end items-center space-x-1 text-sm">
 								<p className="text-gray-500 text-right">
-									Your balance - ${Number(formatUnits(BigInt(deposited), 18))}
+									Your balance - QP {Number(formatUnits(BigInt(deposited), 18))}
 								</p>
-								<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setWithdraw(Number(formatUnits(BigInt(poolBalance), 18)) < Number(formatUnits(BigInt(deposited), 18)) ? formatUnits(BigInt(poolBalance), 18) : formatUnits(BigInt(deposited), 18))}>Max</p>
+								<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => {        console.log(withdraw, Number(formatUnits(BigInt(deposited), 18)))
+        if(Number(withdraw) < Number(formatUnits(BigInt(deposited), 18))) toast("withdrawn amount is larger than active pool amount");setWithdraw(Number(formatUnits(BigInt(poolBalance), 18)) < Number(formatUnits(BigInt(deposited), 18)) ? formatUnits(BigInt(poolBalance), 18) : formatUnits(BigInt(deposited), 18))}}>Max</p>
 							</div>
                             <div
                                 onClick={() => withdrawTokens()}
@@ -293,7 +302,7 @@ const Deposit = () => {
                                     Principal
                                 </p>
                                 <h1 className="font-bold text-xl">
-                                    ${principal}
+                                    TUSDC {principal}
                                 </h1>
                             </div>
                             <div className="p-2 border-b border-black">
@@ -301,13 +310,13 @@ const Deposit = () => {
                                     Interest
                                 </p>
                                 <h1 className="font-bold text-xl">
-                                    ${interest}
+                                    TUSDC {interest}
                                 </h1>
                             </div>
                             <div className="p-2 border-r border-black">
                                 <p className="text-sm text-gray-500">Total</p>
                                 <h1 className="font-bold text-xl">
-                                    ${Number(principal) + Number(interest)}
+                                    TUSDC {Number(principal) + Number(interest)}
                                 </h1>
                             </div>
                             <div className="p-2 border-black">
@@ -388,9 +397,8 @@ const Deposit = () => {
                                     Expected Loss (if defaulted)
                                 </p>
                                 <h1 className="font-bold text-xl">
-                                    $
-                                    {Number(principal) +
-                                        Number(interest) * 0.05 * 0.3}
+                                    TUSDC {(Number(principal) +
+                                        Number(interest)) * 0.05 * 0.3}
                                 </h1>
                             </div>
                             <div className="p-2 border-black">

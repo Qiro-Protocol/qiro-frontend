@@ -37,7 +37,7 @@ export const Navbar = () => {
           type: 'ERC20', // Initially only supports ERC20, but eventually more!
           options: {
             address: TEST_ERC20, // The address that the token is at.
-            symbol: "TESTUSDC", // A ticker symbol or shorthand, up to 5 chars.
+            symbol: "TESTUSDC ", // A ticker symbol or shorthand, up to 5 chars.
             decimals: 18, // The number of decimals in the token
           },
         }
@@ -82,10 +82,10 @@ export const Navbar = () => {
         <Link className="text-2xl font-bold" href="/">Qiro</Link>
       </div>
       <div className="w-full h-full mb-5 md:m-0 p-0 md:pr-20 h-20 flex-col md:flex-row flex justify-center md:justify-end items-center space-y-3 md:space-y-0 space-x-0 md:space-x-4">
-        <Link href="/borrow">Borrow / Repay</Link>
-        <Link href="/pool">Deposit / Withdraw</Link>
+        <Link href="/borrow">Borrow</Link>
+        <Link href="/pool">Deposit</Link>
         <div onClick={() => mint()} className="cursor-pointer">Mint</div>
-        <div onClick={() => addTokenToPool()} className="cursor-pointer">Add tokens to wallet</div>
+        <div onClick={() => addTokenToPool()} className="cursor-pointer whitespace-nowrap">Add tokens</div>
         <ConnectButton />
       </div>
     </div>
