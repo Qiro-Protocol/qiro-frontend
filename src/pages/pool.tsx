@@ -34,6 +34,7 @@ const Deposit = () => {
         onSuccess: (data) => {
             setBalance(Number(data))
         },
+        watch: true
     })
 
 	const ____ = useContractRead({
@@ -44,6 +45,7 @@ const Deposit = () => {
         onSuccess: (data) => {
             setPoolBalance(Number(data))
         },
+        watch: true
     })
 
     const _ = useContractRead({
@@ -54,6 +56,7 @@ const Deposit = () => {
         onSuccess: (data) => {
             setDeposited(Number(data))
         },
+        watch: true
     })
 
     const publicClient = usePublicClient()
@@ -302,7 +305,7 @@ const Deposit = () => {
                                     Principal
                                 </p>
                                 <h1 className="font-bold text-xl">
-                                    TUSDC {principal}
+                                    TUSDC {Number(principal).toFixed(2)}
                                 </h1>
                             </div>
                             <div className="p-2 border-b border-black">
@@ -310,13 +313,13 @@ const Deposit = () => {
                                     Interest
                                 </p>
                                 <h1 className="font-bold text-xl">
-                                    TUSDC {interest}
+                                    TUSDC {Number(interest).toFixed(2)}
                                 </h1>
                             </div>
                             <div className="p-2 border-r border-black">
                                 <p className="text-sm text-gray-500">Total</p>
                                 <h1 className="font-bold text-xl">
-                                    TUSDC {Number(principal) + Number(interest)}
+                                    TUSDC {(Number(principal) + Number(interest)).toFixed(2)}
                                 </h1>
                             </div>
                             <div className="p-2 border-black">
@@ -397,8 +400,8 @@ const Deposit = () => {
                                     Expected Loss (if defaulted)
                                 </p>
                                 <h1 className="font-bold text-xl">
-                                    TUSDC {(Number(principal) +
-                                        Number(interest)) * 0.05 * 0.3}
+                                    TUSDC {((Number(principal) +
+                                        Number(interest)) * 0.05 * 0.3).toFixed(2)}
                                 </h1>
                             </div>
                             <div className="p-2 border-black">

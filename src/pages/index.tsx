@@ -67,6 +67,7 @@ const Deposit = () => {
     onSuccess: (data) => {
       setBalance(Number(data));
     },
+    watch: true
   });
 
   const _ = useContractRead({
@@ -77,6 +78,7 @@ const Deposit = () => {
     onSuccess: (data) => {
       setPoolBalance(Number(data));
     },
+    watch: true
   });
 
   const publicClient = usePublicClient();
@@ -196,7 +198,8 @@ const Deposit = () => {
         },
         onError: (e) => {
             console.log(e, "error")
-        }
+        },
+        watch: true
       });
       
       const __ = useContractRead({
@@ -207,6 +210,7 @@ const Deposit = () => {
         onSuccess: (data: any) => {
           setInterest(formatUnits(data, 18));
         },
+        watch: true
       });
 
       const { config, error } = usePrepareContractWrite({

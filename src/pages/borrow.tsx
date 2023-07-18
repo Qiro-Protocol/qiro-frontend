@@ -47,6 +47,7 @@ export default function Borrow() {
         onSuccess: (data) => {
             setUserBalance(Number(data))
         }
+        watch: true
     })
 
     const { data, isError, isLoading } = useContractRead({
@@ -58,6 +59,7 @@ export default function Borrow() {
             console.log(data)
             setLoans(data as any[])
         },
+        watch: true
     })
 
     const publicClient = usePublicClient()
@@ -204,9 +206,9 @@ export default function Borrow() {
                         />
 						<div className="w-full flex justify-end items-center space-x-1 text-sm">
 							<p className="text-gray-500 text-right">
-								Pool balance - TUSDC {Number(formatUnits(BigInt(balance), 18)).toFixed(2)}
+								Pool balance - TUSDC {Number(formatUnits(BigInt(balance), 18)) - 1 < 0 ? 0 : (Number(formatUnits(BigInt(balance), 18)) - 1).toFixed(2)}
 							</p>
-							<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setBorrow(formatUnits(BigInt(balance), 18))}>Max</p>
+							<p className="text-[#ff8802] font-bold cursor-pointer" onClick={() => setBorrow(Number(formatUnits(BigInt(balance), 18)) - 1 < 0 ? "0" : (Number(formatUnits(BigInt(balance), 18)) - 1).toString())}>Max</p>
 						</div>
                         <div
                             onClick={() => borrowTokens()}
