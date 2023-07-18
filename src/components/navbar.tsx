@@ -83,7 +83,7 @@ export const Navbar = () => {
       </div>
       <div className="w-full h-full mb-5 md:m-0 p-0 md:pr-20 h-20 flex-col md:flex-row flex justify-center md:justify-end items-center space-y-3 md:space-y-0 space-x-0 md:space-x-4">
         <Link href="/borrow">Borrow</Link>
-        <Link href="/pool">Deposit</Link>
+        <Link href="/pool">Invest</Link>
         <div onClick={() => mint()} className="cursor-pointer">Mint</div>
         <div onClick={() => addTokenToPool()} className="cursor-pointer whitespace-nowrap">Add tokens</div>
         <ConnectButton />
