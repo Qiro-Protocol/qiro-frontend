@@ -99,7 +99,7 @@ const Deposit = () => {
         abi: ERC20_ABI,
         functionName: "approve",
         gas: 10000000n,
-        args: [QIRO_ADDRESS, parseUnits(deposit as `TUSDC {number}`, 18)],
+        args: [QIRO_ADDRESS, parseUnits(deposit as `${number}`, 18)],
       });
 
       await publicClient.waitForTransactionReceipt({
@@ -131,7 +131,7 @@ const Deposit = () => {
         abi: QIRO_POOL_ABI,
         functionName: "deposit",
         gas: 10000000n,
-        args: [parseUnits(deposit as `TUSDC {number}`, 18), client.account.address],
+        args: [parseUnits(deposit as `${number}`, 18), client.account.address],
       });
 
       await publicClient.waitForTransactionReceipt({
@@ -163,7 +163,7 @@ const Deposit = () => {
         functionName: "withdraw",
         gas: 10000000n,
         args: [
-          parseUnits(withdraw as `TUSDC {number}`, 18),
+          parseUnits(withdraw as `${number}`, 18),
           client.account.address,
           client.account.address,
         ],
