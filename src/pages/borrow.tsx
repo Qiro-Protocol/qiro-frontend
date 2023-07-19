@@ -229,7 +229,7 @@ export default function Borrow() {
                                             Borrow Amount
                                         </p>
                                         <h1 className="text-2xl font-bold">
-                                            TUSDC 
+                                            $ 
                                             {Number(
                                                 formatUnits(
                                                     loan.borrowAmount.toString(),
@@ -243,7 +243,7 @@ export default function Borrow() {
                                             Repaid Amount
                                         </p>
                                         <h1 className="text-2xl font-bold">
-                                            TUSDC 
+                                            $ 
                                             {Number(
                                                 formatUnits(
                                                     loan.repaidAmount.toString(),

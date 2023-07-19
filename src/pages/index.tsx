@@ -34,7 +34,7 @@ const ComingSoon = (props: {name: string, amount: string, tenure: string, percen
       <div className="w-full h-full flex justify-center items-center space-x-3">
           <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Total Loan Amount</h1>
-              <h1 className="text-xl font-bold">TUSDC {props.amount}</h1>
+              <h1 className="text-xl font-bold">$ {props.amount}</h1>
           </div>
           <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
               <h1>Loan term</h1>
@@ -268,11 +268,11 @@ const Deposit = () => {
         <Box>
             <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Total Active Loans</h1>
-                <h1 className="text-xl font-bold">TUSDC {principal}</h1>
+                <h1 className="text-xl font-bold">$ {Number(principal).toFixed(2)}</h1>
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Interest Earned</h1>
-                <h1 className="text-xl font-bold">TUSDC {interest}</h1>
+                <h1 className="text-xl font-bold">$ {Number(interest).toFixed(2)}</h1>
             </div>
             <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                 <h1>Default rate</h1>
@@ -284,7 +284,7 @@ const Deposit = () => {
             <div className="w-full h-full flex justify-center items-center space-x-3">
                 <div className="w-1/3 text-center py-5 h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Total Loan Amount</h1>
-                    <h1 className="text-xl font-bold">TUSDC {principal}</h1>
+                    <h1 className="text-xl font-bold">$ {Number(principal).toFixed(2)}</h1>
                 </div>
                 <div className="w-1/3 text-center py-5  h-full border rounded-xl flex flex-col justify-center items-center">
                     <h1>Loan term</h1>
