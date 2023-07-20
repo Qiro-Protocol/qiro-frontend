@@ -269,7 +269,25 @@ export default function Borrow() {
                                         onChange={(e) =>
                                             setTimes((times) => {
                                                 const [...t] = times
-                                                if(Number(e.target.value) > 12) e.target.value = "12"
+
+                                                const maxRepayMonth = ((Number(
+                                                    formatUnits(
+                                                        loan.borrowAmount.toString(),
+                                                        18
+                                                    )
+                                                ) - Number(
+                                                    formatUnits(
+                                                        loan.repaidAmount.toString(),
+                                                        18
+                                                    )
+                                                )) / Number(
+                                                    formatUnits(
+                                                        loan.borrowAmount.toString(),
+                                                        18
+                                                    )
+                                                )) * 12
+
+                                                if(Number(e.target.value) > maxRepayMonth) e.target.value = Math.floor(maxRepayMonth).toString()
                                                 t[idx] = Number(e.target.value)
                                                 return t
                                             })
